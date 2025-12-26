@@ -182,7 +182,7 @@ class GoogleDriveController extends Controller
                 'success' => true,
                 'path' => $path,
                 'fileName' => $fileName,
-                'url' => Storage::disk('public')->url($path),
+                'url' => asset('storage/' . $path),
             ]);
 
         } catch (\Exception $e) {
