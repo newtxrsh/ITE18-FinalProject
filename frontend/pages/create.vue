@@ -155,7 +155,7 @@
               </div>
               <div class="text-left flex-1">
                 <p class="text-sm font-medium text-blue-400">{{ selectedFile?.name || googleDriveFile?.name }}</p>
-                <p class="text-xs text-white/40">{{ googleDriveFile ? 'From Google Drive' : 'Local file' }}</p>
+                <p class="text-xs text-white/40">{{ googleDriveFile ? 'From Google Drive' : 'From Local file' }}</p>
               </div>
               <svg class="w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
