@@ -15,6 +15,18 @@
 
     <!-- Navigation -->
     <nav class="nav-section">
+      <NuxtLink to="/dashboard" class="nav-item" :class="{ active: route.path === '/dashboard' }">
+        <div class="nav-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="8" height="8" rx="1.5"/>
+            <rect x="13" y="3" width="8" height="8" rx="1.5"/>
+            <rect x="3" y="13" width="8" height="8" rx="1.5"/>
+            <rect x="13" y="13" width="8" height="8" rx="1.5"/>
+          </svg>
+        </div>
+        <span class="nav-text">Dashboard</span>
+      </NuxtLink>
+
       <NuxtLink to="/" class="nav-item" :class="{ active: route.path === '/' || route.path === '/board' }">
         <div class="nav-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
