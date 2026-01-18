@@ -81,7 +81,7 @@
           <path d="M9 16l2 2 4-4"/>
         </svg>
         <p>No upcoming deadlines</p>
-        <span>All caught up! 🎉</span>
+        <span>All caught up!</span>
       </div>
     </div>
   </div>
