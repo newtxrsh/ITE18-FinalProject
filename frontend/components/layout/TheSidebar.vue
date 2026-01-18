@@ -16,6 +16,7 @@
     <!-- Navigation -->
     <nav class="nav-section">
       <NuxtLink to="/dashboard" class="nav-item" :class="{ active: route.path === '/dashboard' }">
+<<<<<<< HEAD
         <div class="nav-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
             <rect x="3" y="3" width="8" height="8" rx="1.5"/>
@@ -28,15 +29,27 @@
       </NuxtLink>
 
       <NuxtLink to="/" class="nav-item" :class="{ active: route.path === '/' || route.path === '/board' }">
+=======
+>>>>>>> a363cd2b9b26ea53213c4894b7e23618f6b80579
         <div class="nav-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="3" y="3" width="7" height="9" rx="1"/>
-            <rect x="14" y="3" width="7" height="5" rx="1"/>
-            <rect x="14" y="12" width="7" height="9" rx="1"/>
-            <rect x="3" y="16" width="7" height="5" rx="1"/>
+            <rect x="3" y="3" width="8" height="8" rx="1.5"/>
+            <rect x="13" y="3" width="8" height="8" rx="1.5"/>
+            <rect x="3" y="13" width="8" height="8" rx="1.5"/>
+            <rect x="13" y="13" width="8" height="8" rx="1.5"/>
           </svg>
         </div>
-        <span class="nav-text">Board</span>
+        <span class="nav-text">Dashboard</span>
+      </NuxtLink>
+
+      <NuxtLink to="/tasks" class="nav-item" :class="{ active: route.path === '/tasks' || route.path === '/' }">
+        <div class="nav-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M9 11l3 3L22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+        </div>
+        <span class="nav-text">Tasks</span>
       </NuxtLink>
 
       <NuxtLink to="/create" class="nav-item" :class="{ active: route.path === '/create' }">
