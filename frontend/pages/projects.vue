@@ -103,7 +103,7 @@
         </svg>
       </div>
       <p class="text-white/40 text-base mb-4">No projects created.</p>
-      <NuxtLink to="/create" class="w-fit inline-flex items-center gap-2 px-5 py-2.5 bg-[#0f1826] text-[#8db3ff] border border-[#8db3ff]/20 font-semibold rounded-md transition-colors duration-200 hover:bg-[#1a2942] hover:text-[#a3c2ff]">
+      <NuxtLink to="/create" class="w-fit inline-flex items-center gap-2 px-5 py-2.5 bg-[#01183b] text-[#8db3ff] font-semibold rounded-md transition-colors duration-200 hover:bg-[#1a2942] hover:text-[#a3c2ff]">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
