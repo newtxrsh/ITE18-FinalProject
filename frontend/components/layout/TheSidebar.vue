@@ -13,6 +13,15 @@
     <!-- Divider -->
     <div class="divider"></div>
 
+    <!-- Create Button -->
+    <button class="create-btn" @click="openCreateModal">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      <span>Create</span>
+    </button>
+
     <!-- Navigation -->
     <nav class="nav-section">
       <NuxtLink to="/dashboard" class="nav-item" :class="{ active: route.path === '/dashboard' }">
@@ -35,16 +44,6 @@
           </svg>
         </div>
         <span class="nav-text">Tasks</span>
-      </NuxtLink>
-
-      <NuxtLink to="/create" class="nav-item" :class="{ active: route.path === '/create' }">
-        <div class="nav-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <line x1="12" y1="5" x2="12" y2="19"/>
-            <line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-        </div>
-        <span class="nav-text">Create</span>
       </NuxtLink>
 
       <NuxtLink to="/projects" class="nav-item" :class="{ active: route.path === '/projects' }">
@@ -109,12 +108,37 @@
         <span>Log out</span>
       </button>
     </div>
+
+    <!-- Create Task Modal -->
+    <CreateTaskModal 
+      :is-open="showCreateModal" 
+      @close="closeCreateModal"
+      @created="handleTaskCreated"
+    />
   </aside>
 </template>
 
 <script setup lang="ts">
+import CreateTaskModal from '~/components/common/CreateTaskModal.vue'
+
 const authStore = useAuthStore()
 const route = useRoute()
+
+// Create modal state
+const showCreateModal = ref(false)
+
+const openCreateModal = () => {
+  showCreateModal.value = true
+}
+
+const closeCreateModal = () => {
+  showCreateModal.value = false
+}
+
+const handleTaskCreated = () => {
+  // Optionally refresh data or navigate
+  // The modal will close automatically
+}
 
 const handleLogout = async () => {
   await authStore.logout()
@@ -128,7 +152,7 @@ const handleLogout = async () => {
   height: 100vh;
   position: sticky;
   top: 0;
-  background: #ffffff;
+  background: #111111;
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
@@ -148,21 +172,52 @@ const handleLogout = async () => {
 }
 
 .logo-icon {
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
 }
 
 .logo-text {
   font-size: 26px;
   font-weight: 700;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   letter-spacing: -0.5px;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Create Button */
+.create-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  padding: 14px 16px;
+  margin-top: 8px;
+  margin-bottom: 18px;
+  background: rgb(255, 255, 255);
+  border: none;
+  border-radius: 8px;
+  color: #000000;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.create-btn:hover {
+  background: rgb(209, 209, 209);
+    transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(15, 24, 38, 0.4);
+}
+
+.create-btn:active {
+  transform: translateY(0);
 }
 
 /* Divider */
 .divider {
   height: 1px;
-  background: rgb(0, 0, 0);
+  background: rgb(73, 73, 73);
   margin: 16px 0;
 }
 
@@ -171,6 +226,7 @@ const handleLogout = async () => {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  padding-top: 4px;
 }
 
 .nav-item {
@@ -179,16 +235,16 @@ const handleLogout = async () => {
   gap: 14px;
   padding: 14px 16px;
   border-radius: 8px;
-  color: #000000;
+  color: #ffffff;
   text-decoration: none;
   transition: all 0.2s ease;
   border: 1px solid transparent;
 }
 
 .nav-item:hover {
-  background: rgba(2, 0, 56, 0.156);
-  color:#000000;
-  transform: translateX(6px);
+  background: rgb(39, 39, 39);
+  color:#ffffff;
+  transform: translateX(3px);
 }
 
 .nav-item.active {
@@ -269,14 +325,14 @@ const handleLogout = async () => {
 .user-name {
   font-size: 14px;
   font-weight: 600;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   line-height: 1.3;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .user-email {
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.5);
   line-height: 1.3;
   white-space: nowrap;
   overflow: hidden;
