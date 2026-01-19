@@ -182,7 +182,8 @@ const showOverdueAlert = ref(true)
 
 // Computed
 const userName = computed(() => {
-  return authStore.userName || 'there'
+  // Use first_name for greetings, fallback to userName if first_name not available
+  return authStore.user?.first_name || authStore.userName || 'there'
 })
 
 const greeting = computed(() => {
