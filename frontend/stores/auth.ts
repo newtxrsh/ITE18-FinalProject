@@ -4,6 +4,8 @@ export interface User {
   id: number
   email: string
   fname?: string
+  first_name?: string
+  last_name?: string
   lname?: string
   profile_picture?: string | null
   email_verified_at?: string | null
@@ -199,16 +201,13 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async register(email: string, password: string) {
+    async register(email: string, password: string, firstName: string, lastName: string) {
       const config = useRuntimeConfig()
       
       try {
-        // Extract fname from email (username part before @)
-        const fname = email.split('@')[0]
-        
         const response = await $fetch<{ token: string; message?: string }>(`${config.public.apiBase}/register`, {
           method: 'POST',
-          body: { email, password, fname },
+          body: { email, password, first_name: firstName, last_name: lastName },
         })
 
         if (response.token) {
