@@ -11,13 +11,12 @@
             <input 
               v-model="searchQuery"
               type="text" 
-              class="w-64 pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-full text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all shadow-lg shadow-black/10 hover:shadow-black/20"
+              class="w-64 pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all shadow-lg shadow-black/10 hover:shadow-black/20"
               placeholder="Search tasks..."
             >
-            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8"/>
-              <path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
-            </svg>
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" fill="none" stroke="currentColor" stroke-width="2.5"viewBox="0 0 24 24" stroke-linecap="round">
+                <path d="M10 17a7 7 0 100-14 7 7 0 000 14zm8 2l-3.35-3.35" />
+              </svg>
           </div>
           
           <!-- Quick Filters Dropdown -->
@@ -67,12 +66,12 @@
         </svg>
       </div>
       <p class="text-white/40 text-base mb-4">No task created.</p>
-      <NuxtLink to="/create" class="w-fit inline-flex items-center gap-2 px-5 py-2.5 bg-[#ffffff] text-[#000000] font-semibold rounded-md transition-colors duration-200 hover:bg-[#b0afaf] hover:text-[#000000]">
+      <button @click="openCreateModal" class="w-fit inline-flex items-center gap-2 px-5 py-2.5 bg-[#ffffff] text-[#000000] font-semibold rounded-md transition-colors duration-200 hover:bg-[#b0afaf] hover:text-[#000000]">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
         <span>Create Task</span>
-      </NuxtLink>
+      </button>
     </div>
 
     <!-- Kanban Tasks View -->
@@ -122,10 +121,19 @@
         @subtask-updated="handleSubtaskUpdated"
       />
     </Transition>
+
+    <!-- Create Task Modal -->
+    <CreateTaskModal 
+      :is-open="showCreateModal"
+      @close="closeCreateModal"
+      @created="handleTaskCreated"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import CreateTaskModal from '~/components/common/CreateTaskModal.vue'
+
 // SEO Meta
 useHead({
   title: 'Tasks',
@@ -146,6 +154,7 @@ const searchQuery = ref('')
 const currentCategory = ref('all')
 const showFiltersDropdown = ref(false)
 const selectedTask = ref<any>(null)
+const showCreateModal = ref(false)
 
 // Filter options
 const filters = [
@@ -284,6 +293,20 @@ const handleOpenTaskFromNotification = async (taskId: number) => {
       selectedTask.value = task
     }
   }
+}
+
+const openCreateModal = () => {
+  showCreateModal.value = true
+}
+
+const closeCreateModal = () => {
+  showCreateModal.value = false
+}
+
+const handleTaskCreated = async () => {
+  // Reload tasks after creation
+  await loadTasks()
+  closeCreateModal()
 }
 
 const loadTasks = async () => {
