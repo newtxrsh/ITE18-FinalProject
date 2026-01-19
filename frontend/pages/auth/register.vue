@@ -46,6 +46,46 @@
 
       <!-- Register Form -->
       <form @submit.prevent="submitForm" class="space-y-5">
+        <!-- First Name Field -->
+        <div class="space-y-2">
+          <label for="firstName" class="block text-sm font-medium text-white/90">First Name</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg class="w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </div>
+            <input 
+              type="text" 
+              id="firstName" 
+              v-model="firstName"
+              class="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+              placeholder="John"
+              required
+            >
+          </div>
+        </div>
+
+        <!-- Last Name Field -->
+        <div class="space-y-2">
+          <label for="lastName" class="block text-sm font-medium text-white/90">Last Name</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg class="w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </div>
+            <input 
+              type="text" 
+              id="lastName" 
+              v-model="lastName"
+              class="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
+              placeholder="Doe"
+              required
+            >
+          </div>
+        </div>
+
         <!-- Email Field -->
         <div class="space-y-2">
           <label for="email" class="block text-sm font-medium text-white/90">Email address</label>
@@ -241,6 +281,8 @@ const authStore = useAuthStore()
 const config = useRuntimeConfig()
 
 // Form state
+const firstName = ref('')
+const lastName = ref('')
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
@@ -312,7 +354,7 @@ const submitForm = async () => {
   successMessage.value = ''
 
   try {
-    const result = await authStore.register(email.value, password.value)
+    const result = await authStore.register(email.value, password.value, firstName.value, lastName.value)
     
     if (result.success) {
       successMessage.value = 'Account created successfully!'
