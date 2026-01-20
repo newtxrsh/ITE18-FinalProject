@@ -8,11 +8,11 @@
     >
       <svg 
         class="notification-icon" 
-        width="22" 
-        height="22" 
+        width="23" 
+        height="23" 
         viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
+        fill="currentColor" 
+        stroke="none" 
         stroke-width="2"
       >
         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -260,25 +260,17 @@ onUnmounted(() => {
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   cursor: pointer;
-  border-radius: 0.5rem;
+  border-radius: 50%;
   transition: all 0.2s ease;
 }
 
 .notification-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-}
-
-.notification-icon {
-  transition: transform 0.2s ease;
-}
-
-.notification-btn:hover .notification-icon {
-  transform: rotate(15deg);
 }
 
 .notification-badge {
