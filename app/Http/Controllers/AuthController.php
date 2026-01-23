@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Mail\VerifyEmailOtpMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -42,8 +44,9 @@ class AuthController extends Controller
             'is_verified' => false,
         ]);
 
-        // Create token so the user can access the app immediately
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // Note: Session is NOT created during registration
+        // User must verify email first, then login to establish a session
+        // This ensures sessions are only created after successful authentication
 
         // Send OTP for email verification (cache-backed, expires in 2 minutes).
         $this->sendEmailVerificationOtp($user, force: true);
@@ -52,7 +55,6 @@ class AuthController extends Controller
         if ($request->is('api/*')) {
             return response()->json([
                 'message' => 'Registration successful. Please verify your email.',
-                'token' => $token,
                 'redirect_url' => '/verify-email',
             ], 201);
         }
@@ -76,18 +78,25 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // Regenerate session ID to prevent session fixation attacks
+        // This must be done BEFORE authentication to ensure a new session is created
+        $request->session()->regenerate();
+
+        // Authenticate user using Laravel's session-based authentication
+        Auth::login($user);
+
+        // Store user_id in session for easy access
+        $request->session()->put('user_id', $user->user_id);
 
         if ($request->is('api/*')) {
             return response()->json([
-                'token' => $token,
-                'token_type' => 'Bearer',
+                'message' => 'Login successful',
                 'user' => $user,
             ]);
         }
 
         // For web requests, redirect to tasks page
-        return redirect()->route('tasks')->with('token', $token);
+        return redirect()->route('tasks');
     }
 
     public function verifyEmailOtp(Request $request)
@@ -180,8 +189,27 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Logged out']);
+        // Get user before logout (for API responses)
+        $user = $request->user();
+
+        // Destroy the session
+        Auth::logout();
+
+        // Invalidate the session cookie
+        $request->session()->invalidate();
+        
+        // Regenerate CSRF token for security
+        $request->session()->regenerateToken();
+
+        // Clear the session cookie by setting it to expire in the past
+        $cookieName = config('session.cookie');
+        $cookie = cookie($cookieName, '', -1, config('session.path'), config('session.domain'), config('session.secure'), config('session.http_only'), false, config('session.same_site'));
+
+        if ($request->is('api/*')) {
+            return response()->json(['message' => 'Logged out successfully'])->withCookie($cookie);
+        }
+
+        return redirect('/auth/login')->withCookie($cookie);
     }
 
     private function sendEmailVerificationOtp(User $user, bool $force = false): void
@@ -398,12 +426,17 @@ class AuthController extends Controller
             'is_verified' => true,
         ]);
 
-        // Create auth token
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // Regenerate session ID to prevent session fixation attacks
+        $request->session()->regenerate();
+
+        // Authenticate user using Laravel's session-based authentication
+        Auth::login($user);
+
+        // Store user_id in session for easy access
+        $request->session()->put('user_id', $user->user_id);
 
         return response()->json([
             'message' => 'Account created and email verified successfully.',
-            'token' => $token,
             'user' => $user,
         ], 201);
     }

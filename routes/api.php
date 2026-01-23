@@ -34,7 +34,8 @@ Route::get('/attachments/{attachmentId}/download', [AttachmentsController::class
 // Philippine holidays (public - no auth required)
 Route::get('/holidays', [HolidaysController::class, 'index']);
 
-Route::middleware('auth:sanctum')->group(function () {
+// Protected routes using session-based authentication
+Route::middleware('auth:web')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -46,8 +47,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/check-user', [UsersController::class, 'checkUser']);
     Route::get('/tasks', [TasksController::class, 'apiIndex']);
     Route::post('/tasks', [TasksController::class, 'store']);
-    Route::put('/tasks/{taskId}', [TasksController::class, 'update']);
-    Route::delete('/tasks/{taskId}', [TasksController::class, 'destroy']);
+    
+    // Task-specific routes with permission middleware
+    Route::put('/tasks/{taskId}', [TasksController::class, 'update'])->middleware('task.permission');
+    Route::delete('/tasks/{taskId}', [TasksController::class, 'destroy'])->middleware('task.permission');
+    
     Route::get('/projects', [TasksController::class, 'projects']);
     Route::get('/activity-logs', [ActivityLogsController::class, 'index']);
     Route::delete('/activity-logs', [ActivityLogsController::class, 'destroy']);

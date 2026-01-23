@@ -65,19 +65,22 @@ class GoogleLoginController extends Controller
                 ]);
             }
 
-            // Log the user in using Laravel's Auth system
+            // Regenerate session ID to prevent session fixation attacks
+            // This must be done BEFORE authentication to ensure a new session is created
+            request()->session()->regenerate();
+
+            // Authenticate user using Laravel's session-based authentication
             Auth::login($user);
 
-            // Create Sanctum token
-            $token = $user->createToken('auth_token')->plainTextToken;
+            // Store user_id in session for easy access
+            request()->session()->put('user_id', $user->user_id);
 
-            // Redirect to Nuxt frontend with token
-            // The frontend URL can be configured via environment variable
+            // Redirect to Nuxt frontend callback
+            // Session cookie is automatically set and will be sent with subsequent requests
             $frontendUrl = env('FRONTEND_URL', 'http://localhost:3000');
             
-            // Redirect to frontend with token as query parameter
-            // The frontend will handle storing the token and redirecting to the tasks page
-            return redirect($frontendUrl . '/auth/callback?token=' . $token . '&user_id=' . $user->id);
+            // Redirect to frontend callback - session is already established
+            return redirect($frontendUrl . '/auth/callback');
         } catch (\Exception $e) {
             // Handle errors - redirect to frontend login with error
             $frontendUrl = env('FRONTEND_URL', 'http://localhost:3000');

@@ -21,7 +21,7 @@ Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:web');
 
 // Simple post-registration success page
 Route::get('/verification-success', function () {
@@ -51,8 +51,8 @@ Route::get('/calendar', function () {
 })->name('calendar');
 
 // Other routes (protected)
-Route::get('/users', [UsersController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/tasks', [TasksController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/subtasks', [SubtasksController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/task-collaborators', [TaskCollaboratorsController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/attachments', [AttachmentsController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/users', [UsersController::class, 'index'])->middleware('auth:web');
+Route::get('/tasks', [TasksController::class, 'index'])->middleware('auth:web');
+Route::get('/subtasks', [SubtasksController::class, 'index'])->middleware('auth:web');
+Route::get('/task-collaborators', [TaskCollaboratorsController::class, 'index'])->middleware('auth:web');
+Route::get('/attachments', [AttachmentsController::class, 'index'])->middleware('auth:web');

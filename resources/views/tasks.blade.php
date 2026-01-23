@@ -262,12 +262,9 @@
 
 @push('scripts')
     <script>
-        // Handle Google OAuth token from session
-        @if(session('google_auth_token'))
-            localStorage.setItem('auth_token', '{{ session('google_auth_token') }}');
-            // Clear the token from session after using it
-            {{ session()->forget('google_auth_token') }}
-        @endif
+        // Note: Google OAuth now uses session-based authentication
+        // Session cookie is automatically handled by the browser
+        // No token storage needed
     </script>
     @vite(['resources/js/tasks.js'])
 @endpush

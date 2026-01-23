@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 use App\Http\Middleware\CheckUsers;
+use App\Http\Middleware\CheckTaskPermission;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,8 +19,18 @@ return Application::configure(basePath: dirname(__DIR__))
         // Enable CORS for API and web requests
         $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
 
+        // Add session and cookie middleware to API routes for session-based authentication
+        // Note: Cookie encryption is needed for secure session cookies
+        $middleware->appendToGroup('api', \Illuminate\Cookie\Middleware\EncryptCookies::class);
+        $middleware->appendToGroup('api', \Illuminate\Session\Middleware\StartSession::class);
+
         // Force JSON responses for API routes
         $middleware->appendToGroup('api', App\Http\Middleware\CheckUsers::class);
+
+        // Register task permission middleware with alias
+        $middleware->alias([
+            'task.permission' => CheckTaskPermission::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Return JSON 401 for unauthenticated API requests
